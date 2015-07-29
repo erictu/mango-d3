@@ -1,9 +1,3 @@
-<%@ val viewRegion: (String, String, String) %>
-<%@ val numTracks: String %>
-<%@ val readsExist: Boolean %>
-<%@ val variantsExist: Boolean %>
-<%@ val featuresExist: Boolean %>
-
 <html>
 <head lang="en">
     <meta charset="utf-8">
@@ -12,9 +6,9 @@
     <meta name="description" content="Overall Visualization for Mango">
     <meta name="author" content="Eric Tu">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type = "text/css" href = "css/style.css">
+    <link rel="stylesheet" type = "text/css" href = "../css/style.css">
 
 </head>
 
@@ -123,23 +117,25 @@
 
 <br>
 
-<div id="refArea"></div>
-<div id="featArea"></div>
-<div id="varArea"></div>
-<div id="readsArea"></div>
+<div id="data">
+  <div id="refArea"></div>
+  <div id="featArea"></div>
+  <div id="varArea"></div>
+  <div id="readsArea"></div>
+</div>
 
 <script>
-  var viewRefName = "${viewRegion._1}";
-  var viewRegStart = parseInt(${viewRegion._2}, 10);
-  var viewRegEnd = parseInt(${viewRegion._3}, 10);
+  var viewRefName = "chrM";
+  var viewRegStart = parseInt(0, 10);
+  var viewRegEnd = parseInt(100, 10);
   var width = window.innerWidth - 50;
   var base = 50;
   var trackHeight = 6;
-  var numTracks = parseInt(${numTracks}, 10);
+  var numTracks = parseInt(1158, 10);
   var height = (numTracks+1) * trackHeight;
-  var readsExist = ${readsExist}
-  var variantsExist = ${variantsExist}
-  var featuresExist = ${featuresExist}
+  var readsExist = true
+  var variantsExist = true
+  var featuresExist = true
 </script>
-<script src="js/overall.js"></script>
+<script src="../js/overall.js"></script>
 </html>

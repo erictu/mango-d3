@@ -1,7 +1,7 @@
-var readJsonLocation = "/reads/" + viewRefName + "?start=" + viewRegStart + "&end=" + viewRegEnd;
-var referenceStringLocation = "/reference/" + viewRefName + "?start=" + viewRegStart + "&end=" + viewRegEnd;
-var varJsonLocation = "/variants/" + viewRefName + "?start=" + viewRegStart + "&end=" + viewRegEnd;
-var featureJsonLocation = "/features/" + viewRefName + "?start=" + viewRegStart + "&end=" + viewRegEnd;
+var readJsonLocation = "../data/reads.json";
+var referenceStringLocation = "../data/reference.json";
+var varJsonLocation = "../data/variants.json";
+var featureJsonLocation = "../data/features.json";
 
 //Add Region Info
 d3.select("h2")
@@ -43,7 +43,7 @@ d3.json(referenceStringLocation, function(error, data) {
                     return '#00C000'; //GREEN
                 } else if (d.reference === "C") {
                     return '#E00000'; //CRIMSON
-                } else if (d.reference === "A") { 
+                } else if (d.reference === "A") {
                     return '#5050FF'; //AZURE
                 } else if (d.reference == "T") {
                     return '#E6E600'; //TWEETY BIRD
@@ -76,7 +76,7 @@ if (featuresExist === true) {
             d.featureType = d.featureType;
             d.start = +d.start;
             d.end = +d.end;
-            d.track = +d.track;        
+            d.track = +d.track;
         });
 
         // Add the rectangles
@@ -121,7 +121,7 @@ if (variantsExist === true) {
             d.end = +d.end;
             d.track = +d.track;
             d.alleles = d.alleles;
-            
+
         });
 
         // Add the rectangles
@@ -136,7 +136,7 @@ if (variantsExist === true) {
                             return '#00FFFF'; //CYAN
                         } else if (d.alleles === "Alt / Alt") {
                             return '#FF66FF'; //MAGENTA
-                        } else if (d.reference === "Ref / Ref") { 
+                        } else if (d.reference === "Ref / Ref") {
                             return '#99FF33'; //NEON GREEN
                         } else {
                             return '#FFFF66'; //YELLOW
@@ -318,7 +318,7 @@ function update(newStart, newEnd) {
     //Update Region Info
     d3.select("h2")
         .text("current region: " + viewRefName + ": "+ viewRegStart + "-" + viewRegEnd);
-    
+
     //Updating Reference
     refContainer.selectAll("g").remove();
 
@@ -351,7 +351,7 @@ function update(newStart, newEnd) {
                         return '#00C000'; //GREEN
                     } else if (d.reference === "C") {
                         return '#E00000'; //CRIMSON
-                    } else if (d.reference === "A") { 
+                    } else if (d.reference === "A") {
                         return '#5050FF'; //AZURE
                     } else if (d.reference == "T") {
                         return '#E6E600'; //TWEETY BIRD
@@ -379,9 +379,9 @@ function update(newStart, newEnd) {
                 d.featureType = d.featureType;
                 d.start = +d.start;
                 d.end = +d.end;
-                d.track = +d.track;        
+                d.track = +d.track;
             });
-            
+
             //remove all current elements
             featureSvgContainer.selectAll("g").remove();
 
@@ -420,7 +420,7 @@ function update(newStart, newEnd) {
                 d.end = +d.end;
                 d.track = +d.track;
                 d.alleles = d.alleles;
-                
+
             });
 
             varSvgContainer.selectAll("g").remove();
@@ -437,7 +437,7 @@ function update(newStart, newEnd) {
                                 return '#00FFFF'; //CYAN
                             } else if (d.alleles === "Alt / Alt") {
                                 return '#FF66FF'; //MAGENTA
-                            } else if (d.reference === "Ref / Ref") { 
+                            } else if (d.reference === "Ref / Ref") {
                                 return '#99FF33'; //NEON GREEN
                             } else {
                                 return '#FFFF66'; //YELLOW
@@ -508,7 +508,7 @@ function update(newStart, newEnd) {
                 .attr("class", "axis")
                 .attr("transform", "translate(0, " + height + ")")
                 .call(xAxis);
-        
+
             //update line height
             lineRect.attr("height", height)
             verticalLine.attr("y2", height)
