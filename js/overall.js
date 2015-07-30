@@ -7,12 +7,28 @@ var featureJsonLocation = "../data/features.json";
 d3.select("h2")
     .text("current region: " + viewRefName + ": "+ viewRegStart + "-" + viewRegEnd);
 
-//Reference
+// Svg Containers for Each Div
 var refContainer = d3.select("#refArea")
     .append("svg")
     .attr("width", width)
     .attr("height", 38);
 
+var featureSvgContainer = d3.select("#featArea")
+    .append("svg")
+    .attr("height", 9)
+    .attr("width", width);
+
+var varSvgContainer = d3.select("#varArea")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", 9);
+
+var readsSvgContainer = d3.select("#readsArea")
+    .append("svg")
+    .attr("height", (height+base))
+    .attr("width", width);
+
+// Reference
 
 // Create the scale for the axis
 var axisScale = d3.scale.linear()
@@ -66,11 +82,6 @@ d3.json(referenceStringLocation, function(error, data) {
 
 //Features
 if (featuresExist === true) {
-    var featureSvgContainer = d3.select("#featArea")
-        .append("svg")
-        .attr("height", 9)
-        .attr("width", width);
-
     d3.json(featureJsonLocation, function(error, data) {
         data.forEach(function(d) {
             d.featureId = d.featureId;
@@ -110,11 +121,6 @@ if (featuresExist === true) {
 
 //Variants
 if (variantsExist === true) {
-    var varSvgContainer = d3.select("#varArea")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", 9);
-
     d3.json(varJsonLocation, function(error, data) {
         data.forEach(function(d) {
             d.contigName = d.contigName;
@@ -165,11 +171,6 @@ if (variantsExist === true) {
 
 //Reads
 if (readsExist === true) {
-    var svgContainer = d3.select("#readsArea")
-        .append("svg")
-        .attr("height", (height+base))
-        .attr("width", width);
-
     d3.json(readJsonLocation,function(error, data) {
         data.forEach(function(d) {
             d.readName = d.readName;
@@ -179,7 +180,7 @@ if (readsExist === true) {
         });
 
         // Add the rectangles
-        svgContainer.selectAll("rect").data(data)
+        readsSvgContainer.selectAll("rect").data(data)
             .enter()
                 .append("g")
                 .append("rect")
@@ -204,7 +205,7 @@ if (readsExist === true) {
     });
 
     // Add the axis to the container
-    svgContainer.append("g")
+    readsSvgContainer.append("g")
         .attr("class", "axis")
         .attr("transform", "translate(0, " + height + ")")
         .call(xAxis);
@@ -212,6 +213,13 @@ if (readsExist === true) {
     document.getElementById("readsArea").innerHTML = "No Reads File Loaded"
 }
 
+// Hover box for reads
+var div = d3.select("#readsArea")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+// Vertical Guidance Lines
 var refVertLine = refContainer.append('line')
     .attr({
         'x1': 0,
@@ -242,7 +250,7 @@ var varVertLine = varSvgContainer.append('line')
     .attr("stroke", "#002900")
     .attr("class", "verticalLine");
 
-var readsVertLine = svgContainer.append('line')
+var readsVertLine = readsSvgContainer.append('line')
     .attr({
         'x1': 50,
         'y1': 0,
@@ -251,6 +259,25 @@ var readsVertLine = svgContainer.append('line')
     })
     .attr("stroke", "#002900")
     .attr("class", "verticalLine");
+
+// Mousemove for svg containers
+refContainer.on('mousemove', function () {
+    var xPosition = d3.mouse(this)[0];
+    d3.selectAll(".verticalLine")
+      .attr({
+        "x1" : xPosition,
+        "x2" : xPosition
+      })
+});
+
+featureSvgContainer.on('mousemove', function () {
+    var xPosition = d3.mouse(this)[0];
+    d3.selectAll(".verticalLine")
+      .attr({
+        "x1" : xPosition,
+        "x2" : xPosition
+      })
+});
 
 varSvgContainer.on('mousemove', function () {
     var xPosition = d3.mouse(this)[0];
@@ -261,7 +288,7 @@ varSvgContainer.on('mousemove', function () {
       })
 });
 
-refContainer.on('mousemove', function () {
+readsSvgContainer.on('mousemove', function () {
     var xPosition = d3.mouse(this)[0];
     d3.selectAll(".verticalLine")
       .attr({
@@ -270,16 +297,7 @@ refContainer.on('mousemove', function () {
       })
 });
 
-svgContainer.on('mousemove', function () {
-    var xPosition = d3.mouse(this)[0];
-    d3.selectAll(".verticalLine")
-      .attr({
-        "x1" : xPosition,
-        "x2" : xPosition
-      })
-});
-
-
+// Functions
 
 // Try to move very far left
 function moveVeryFarLeft() {
@@ -520,13 +538,13 @@ function update(newStart, newEnd) {
             height = (numTracks+1) * trackHeight;
 
             // Change dimensions of the SVG container
-            svgContainer.attr("height", (height+base));
+            readsSvgContainer.attr("height", (height+base));
 
             // Remove old content
-            svgContainer.selectAll("g").remove();
+            readsSvgContainer.selectAll("g").remove();
 
             // Add the rectangles
-            svgContainer.selectAll("rect").data(data)
+            readsSvgContainer.selectAll("rect").data(data)
                 .enter()
                     .append("g")
                     .append("rect")
@@ -550,7 +568,7 @@ function update(newStart, newEnd) {
                         });
 
             // Add the axis to the container
-            svgContainer.append("g")
+            readsSvgContainer.append("g")
                 .attr("class", "axis")
                 .attr("transform", "translate(0, " + height + ")")
                 .call(xAxis);
@@ -561,9 +579,3 @@ function update(newStart, newEnd) {
         });
     }
 }
-
-// Hover box for reads
-var div = d3.select("#readsArea")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
