@@ -114,7 +114,7 @@ if (featuresExist === true) {
           .duration(500)
           .style("opacity", 0);
         });
-    });
+  });
 } else {
   document.getElementById("featArea").innerHTML = "No Features File Loaded"
 }
@@ -163,7 +163,7 @@ if (variantsExist === true) {
           .duration(500)
           .style("opacity", 0);
         });
-    });
+  });
 } else {
   document.getElementById("varArea").innerHTML = "No Variants File Loaded"
 }
@@ -471,7 +471,7 @@ function update(newStart, newEnd) {
             .duration(500)
             .style("opacity", 0);
           });
-      });
+    });
   }
 
   //Updating Variants
