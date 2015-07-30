@@ -7,26 +7,32 @@ var featureJsonLocation = "../data/features.json";
 d3.select("h2")
   .text("current region: " + viewRefName + ": "+ viewRegStart + "-" + viewRegEnd);
 
+// Section Heights
+var refHeight = 38;
+var featHeight = 10;
+var varHeight = 10;
+var readsHeight = height;
+
 // Svg Containers for Each Div
 var refContainer = d3.select("#refArea")
   .append("svg")
-  .attr("width", width)
-  .attr("height", 38);
+    .attr("width", width)
+    .attr("height", refHeight);
 
 var featureSvgContainer = d3.select("#featArea")
   .append("svg")
-  .attr("height", 9)
-  .attr("width", width);
+    .attr("height", featHeight)
+    .attr("width", width);
 
 var varSvgContainer = d3.select("#varArea")
   .append("svg")
-  .attr("width", width)
-  .attr("height", 9);
+    .attr("width", width)
+    .attr("height", varHeight);
 
 var readsSvgContainer = d3.select("#readsArea")
   .append("svg")
-  .attr("height", (height+base))
-  .attr("width", width);
+    .attr("height", (height+base))
+    .attr("width", width);
 
 // Reference
 
@@ -37,8 +43,7 @@ var axisScale = d3.scale.linear()
 
 // Create the axis
 var xAxis = d3.svg.axis()
-   .scale(axisScale)
-   .ticks(5);
+   .scale(axisScale);
 
 // Add the axis to the container
 refContainer.append("g")
@@ -69,7 +74,7 @@ d3.json(referenceStringLocation, function(error, data) {
       .attr("width", function(d) {
         return Math.max(1, width/(viewRegEnd-viewRegStart));
       })
-      .attr("height", 10)
+      .attr("height", refHeight)
       .on("mouseover", function(d) {
         div.transition()
           .duration(200)
@@ -97,9 +102,9 @@ if (featuresExist === true) {
       .append("g")
       .append("rect")
         .attr("x", (function(d) { return (d.start-viewRegStart)/(viewRegEnd-viewRegStart) * width; }))
-        .attr("y", 5)
+        .attr("y", 0)
         .attr("width", (function(d) { return Math.max(1,(d.end-d.start)*(width/(viewRegEnd-viewRegStart))); }))
-        .attr("height", (trackHeight-2))
+        .attr("height", featHeight)
         .attr("fill", "#6600CC")
         .on("mouseover", function(d) {
           div.transition()
@@ -136,7 +141,7 @@ if (variantsExist === true) {
       .append("g")
       .append("rect")
         .attr("x", (function(d) { return (d.start-viewRegStart)/(viewRegEnd-viewRegStart) * width; }))
-        .attr("y", 5)
+        .attr("y", 0)
         .attr("fill", function(d) {
           if (d.alleles === "Ref / Alt") {
             return '#00FFFF'; //CYAN
@@ -149,7 +154,7 @@ if (variantsExist === true) {
           }
         })
         .attr("width", (function(d) { return Math.max(1,(d.end-d.start)*(width/(viewRegEnd-viewRegStart))); }))
-        .attr("height", (trackHeight-2))
+        .attr("height", varHeight)
         .on("mouseover", function(d) {
           div.transition()
           .duration(200)
@@ -224,27 +229,27 @@ var refVertLine = refContainer.append('line')
     'x1': 0,
     'y1': 0,
     'x2': 0,
-    'y2': 50
+    'y2': refHeight
   })
   .attr("stroke", "#002900")
   .attr("class", "verticalLine");
 
 var featVertLine = featureSvgContainer.append('line')
   .attr({
-    'x1': 50,
+    'x1': 0,
     'y1': 0,
-    'x2': 50,
-    'y2': height
+    'x2': 0,
+    'y2': featHeight
   })
   .attr("stroke", "#002900")
   .attr("class", "verticalLine");
 
 var varVertLine = varSvgContainer.append('line')
   .attr({
-    'x1': 50,
+    'x1': 0,
     'y1': 0,
-    'x2': 50,
-    'y2': 20
+    'x2': 0,
+    'y2': varHeight
   })
   .attr("stroke", "#002900")
   .attr("class", "verticalLine");
@@ -254,7 +259,7 @@ var readsVertLine = readsSvgContainer.append('line')
     'x1': 50,
     'y1': 0,
     'x2': 50,
-    'y2': height
+    'y2': readsHeight
   })
   .attr("stroke", "#002900")
   .attr("class", "verticalLine");
@@ -423,7 +428,7 @@ function update(newStart, newEnd) {
         .attr("width", function(d) {
           return Math.max(1, width/(viewRegEnd-viewRegStart));
         })
-        .attr("height", 10)
+        .attr("height", refHeight)
         .on("mouseover", function(d) {
           div.transition()
             .duration(200)
@@ -454,9 +459,9 @@ function update(newStart, newEnd) {
         .append("g")
         .append("rect")
           .attr("x", (function(d) { return (d.start-viewRegStart)/(viewRegEnd-viewRegStart) * width; }))
-          .attr("y", 5)
+          .attr("y", 0)
           .attr("width", (function(d) { return Math.max(1,(d.end-d.start)*(width/(viewRegEnd-viewRegStart))); }))
-          .attr("height", (trackHeight-2))
+          .attr("height", featHeight)
           .attr("fill", "#6600CC")
           .on("mouseover", function(d) {
             div.transition()
@@ -493,7 +498,7 @@ function update(newStart, newEnd) {
         .append("g")
         .append("rect")
           .attr("x", (function(d) { return (d.start-viewRegStart)/(viewRegEnd-viewRegStart) * width; }))
-          .attr("y", 5)
+          .attr("y", 0)
           .attr("fill", function(d) {
             if (d.alleles === "Ref / Alt") {
               return '#00FFFF'; //CYAN
@@ -506,7 +511,7 @@ function update(newStart, newEnd) {
             }
           })
           .attr("width", (function(d) { return Math.max(1,(d.end-d.start)*(width/(viewRegEnd-viewRegStart))); }))
-          .attr("height", (trackHeight-2))
+          .attr("height", varHeight)
           .on("mouseover", function(d) {
             div.transition()
             .duration(200)
@@ -571,8 +576,7 @@ function update(newStart, newEnd) {
         .attr("transform", "translate(0, " + height + ")")
         .call(xAxis);
 
-      //update line height
-      lineRect.attr("height", height)
+      //TODO perform update correctly
       verticalLine.attr("y2", height)
     });
   }
