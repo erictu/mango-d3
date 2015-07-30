@@ -21,7 +21,8 @@ var axisScale = d3.scale.linear()
 
 // Create the axis
 var xAxis = d3.svg.axis()
-   .scale(axisScale);
+   .scale(axisScale)
+   .ticks(5);
 
 // Add the axis to the container
 refContainer.append("g")
@@ -211,29 +212,74 @@ if (readsExist === true) {
     document.getElementById("readsArea").innerHTML = "No Reads File Loaded"
 }
 
-//Line for reads
-var lineRect = svgContainer.append("rect").attr({
-    width: width,
-    height: height,
-    fill: "whitesmoke"
-});
-
-var verticalLine = svgContainer.append('line')
+var refVertLine = refContainer.append('line')
     .attr({
         'x1': 0,
         'y1': 0,
         'x2': 0,
+        'y2': 50
+    })
+    .attr("stroke", "#002900")
+    .attr("class", "verticalLine");
+
+var featVertLine = featureSvgContainer.append('line')
+    .attr({
+        'x1': 50,
+        'y1': 0,
+        'x2': 50,
         'y2': height
     })
     .attr("stroke", "#002900")
-    .attr('class', 'verticalLine');
+    .attr("class", "verticalLine");
 
-lineRect.on('mousemove', function () {
+var varVertLine = varSvgContainer.append('line')
+    .attr({
+        'x1': 50,
+        'y1': 0,
+        'x2': 50,
+        'y2': 20
+    })
+    .attr("stroke", "#002900")
+    .attr("class", "verticalLine");
+
+var readsVertLine = svgContainer.append('line')
+    .attr({
+        'x1': 50,
+        'y1': 0,
+        'x2': 50,
+        'y2': height
+    })
+    .attr("stroke", "#002900")
+    .attr("class", "verticalLine");
+
+varSvgContainer.on('mousemove', function () {
     var xPosition = d3.mouse(this)[0];
-    d3.select(".verticalLine").attr("transform", function () {
-        return "translate(" + xPosition + ",0)";
-    });
+    d3.selectAll(".verticalLine")
+      .attr({
+        "x1" : xPosition,
+        "x2" : xPosition
+      })
 });
+
+refContainer.on('mousemove', function () {
+    var xPosition = d3.mouse(this)[0];
+    d3.selectAll(".verticalLine")
+      .attr({
+        "x1" : xPosition,
+        "x2" : xPosition
+      })
+});
+
+svgContainer.on('mousemove', function () {
+    var xPosition = d3.mouse(this)[0];
+    d3.selectAll(".verticalLine")
+      .attr({
+        "x1" : xPosition,
+        "x2" : xPosition
+      })
+});
+
+
 
 // Try to move very far left
 function moveVeryFarLeft() {
